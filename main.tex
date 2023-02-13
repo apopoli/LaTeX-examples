@@ -1,0 +1,103 @@
+\documentclass{report}
+\usepackage{listings}
+\usepackage{mwe}
+
+\input{AP_macros.sty}
+
+\title{A few examples and convenience macros in LaTeX}
+\author{Arturo Popoli}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Two and three figures side by side}
+	\figg{example-image}{Description of (a)}{example-image}{Description of (b)}{Description of the two images}{fig:figg}
+	
+	\figgg{example-image}{Descr...}{example-image}{Descr Second image}{example-image}{Third image}{Description of the three images}{fig:figgg}
+	
+	As one can see in Figs. \ref{fig:figg} and \ref{fig:figgg}$\ldots$
+	
+	\section{Text colors}
+	\tcr{Text in Red} \\
+	\tcb{Text in Blue}
+	
+	\section{Vector quantities and operators}
+	Vector Bold $ \vb{A} $ \\
+	Bold arrow $ \va{A} $ \\
+	Vector unit $ \vu{j} $ \\
+	Dot product $ \vdot $ \\
+	Cross product $ \cp $ \\
+ 	Divergence: $ \div{A} $ \\
+ 	Curl: $ \curl{A} $ \\
+ 	Gradient: $ \grad{A} $ \\
+ 	
+ 	\section{Derivatives}
+ 	Differential: $ \dd{A} $ \\
+ 	Derivative: $ \dv{f}{x} $ \\
+ 	Partial derivative: $ \pdv{f}{x} $
+ 	
+ 	\section{Options for AP macros}
+ 	As in Physics package, default options are:
+ 	\begin{lstlisting}[language=TeX]
+ 		\ExecuteOptions{trig,uprightdiff,bolddel}
+ 	\end{lstlisting} 
+ 	Just remove \texttt{bolddel} to get back to non-bold vector operators.
+ 	
+ 	\section{Plotting analytical functions}
+ 	
+	\begin{figure}[h!]
+		\centering
+	\begin{tikzpicture}
+		\begin{axis}
+			[xlabel = {time (s)},
+			ylabel = {voltage (V)},
+			]
+			\addplot[domain=0:2*pi,smooth] {sin(deg(x))};
+			\addplot[domain=0:2*pi,red,smooth]{sin(deg(x-2/3*pi))};
+			\addplot[domain=0:2*pi,blue,smooth]{sin(deg(x-4/3*pi))};
+			\legend{$\sin(t)$,$\sin(t-2/3\pi)$,$\sin(t+2/3\pi)$}
+		\end{axis}
+	\end{tikzpicture}
+	\end{figure}
+
+	\section{Plotting from tabulated data}
+	
+	\begin{figure}[h!]
+		\centering
+		\begin{tikzpicture}
+		\begin{semilogxaxis}[
+			width=0.5\textwidth,
+			xlabel=Reduced electric field $ \unit{\townsend} $,
+			ylabel=$ \mu_{\ce{N2+}} \unit{\per\meter\squared\per\volt\per\second}$,
+			grid]
+			\addplot[color=black,mark=o] coordinates {
+				(	6.00E+00	,	1.90E-04	)
+				(	8.00E+00	,	1.89E-04	)
+				(	1.00E+01	,	1.88E-04	)
+				(	1.20E+01	,	1.88E-04	)
+				(	1.50E+01	,	1.87E-04	)
+				(	2.00E+01	,	1.85E-04	)
+				(	2.50E+01	,	1.84E-04	)
+				(	3.00E+01	,	1.83E-04	)
+				(	4.00E+01	,	1.80E-04	)
+				(	5.00E+01	,	1.76E-04	)
+				(	6.00E+01	,	1.72E-04	)
+				(	8.00E+01	,	1.66E-04	)
+				(	1.00E+02	,	1.60E-04	)
+				(	1.20E+02	,	1.54E-04	)
+				(	1.50E+02	,	1.47E-04	)
+				(	2.00E+02	,	1.37E-04	)
+				(	2.50E+02	,	1.28E-04	)
+				(	3.00E+02	,	1.20E-04	)
+				(	4.00E+02	,	1.10E-04	)
+				(	5.00E+02	,	1.02E-04	)
+				(	6.00E+02	,	9.50E-05	)
+				(	8.00E+02	,	8.50E-05	)
+			};
+		\end{semilogxaxis}		
+		\end{tikzpicture}
+	\end{figure}
+
+
+\end{document}

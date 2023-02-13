@@ -1,0 +1,185 @@
+% \ProvidesPackage{AP_macros}[2011/02/23 v1.0 My own macros]
+\usepackage{xcolor}
+\usepackage{xparse}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[margin=2cm]{geometry}
+\usepackage{siunitx}
+\DeclareSIUnit\townsend{Td}
+\usepackage{pgfplots}
+\usepackage{mhchem}
+
+\newcommand{\tcr}[1]{\textcolor{red}{#1}}
+\newcommand{\tcb}[1]{\textcolor{blue}{#1}}
+\newcommand{\femname}{FLARE } % FINESSE
+\newcommand{\femnamefull}{FLARE -- Finite eLement Analysis foR Electromagnetics } % FINESSE
+\def\affil{\textit{DEI -- ``Guglielmo Marconi''} \\ \textit{University of Bologna}\\ Bologna, Italy \\}
+\newcommand{\pt}[1]{\left(#1\right)} % parentesi tonde
+\newcommand{\pq}[1]{\left[#1\right]} % parentesi quadre
+\newcommand{\pg}[1]{\left\lbrace #1\right\rbrace} % parentesi graffe
+
+%% FROM PHYSICS
+\DeclareOption{trig}{\let\trigopt = 1}
+\DeclareOption{notrig}{\let\trigopt = 0}
+\DeclareOption{uprightdiff}{\def\diffd{\mathrm{d}}} % Upright differentials
+\DeclareOption{italicdiff}{\def\diffd{d}} % Italic differentials
+\DeclareOption{bolddel}{\DeclareDocumentCommand\vnabla{}{\boldsymbol\nabla}} % Vector bold \nabla symbol
+\DeclareOption{arrowdel}{\DeclareDocumentCommand\vnabla{}{\vec{\boldsymbol\nabla}}} % Vector arrow \nabla symbol
+\ExecuteOptions{trig,uprightdiff,bolddel}
+\ProcessOptions\relax
+
+% Symbols
+\ProvideDocumentCommand\varE{}{\mathcal{E}} % Curly 'E'
+\ProvideDocumentCommand\ordersymbol{}{\mathcal{O}} % Order symbol --> O(x^2)
+\ProvideDocumentCommand\lparen{}{(} % Left parenthesis
+\ProvideDocumentCommand\rparen{}{)} % Right parenthesis
+
+\DeclareDocumentCommand\argopen{s}{\IfBooleanTF{#1}{\mathopen{}\mathclose\bgroup}{\mathopen{}\mathclose\bgroup\left}} % Special open grouping for argument of a function
+\DeclareDocumentCommand\argclose{s}{\IfBooleanTF{#1}{\egroup}{\aftergroup\egroup\right}} % Special close grouping for argument of a function
+
+% Vector notation
+\DeclareDocumentCommand\vectorbold{ s m }{\IfBooleanTF{#1}{\boldsymbol{#2}}{\mathbf{#2}}} % Vector bold [star for Greek and italic Roman]
+\DeclareDocumentCommand\vb{}{\vectorbold} % Shorthand for \vectorbold
+
+\DeclareDocumentCommand\vectorarrow{ s m }{\IfBooleanTF{#1}{\vec{\boldsymbol{#2}}}{\vec{\mathbf{#2}}}} % Vector arrow + bold [star for Greek and italic Roman]
+\DeclareDocumentCommand\va{}{\vectorarrow} % Shorthand for \vectorarrow
+
+\DeclareDocumentCommand\vectorunit{ s m }{\IfBooleanTF{#1}{\boldsymbol{\hat{#2}}}{\mathbf{\hat{#2}}}} % Unit vector [star for Greek and italic Roman]
+\DeclareDocumentCommand\vu{}{\vectorunit} % Shorthand for \vectorunit
+
+\DeclareDocumentCommand\dotproduct{}{\boldsymbol\cdot} % Vector dot product symbol
+\DeclareDocumentCommand\vdot{}{\dotproduct} % Shorthand for \dotproduct [note that the command sequence \dp is protected]
+
+\DeclareDocumentCommand\crossproduct{}{\boldsymbol\times} % Vector cross product symbol
+\DeclareDocumentCommand\cross{}{\crossproduct} % Shorthand for \crossproduct
+\DeclareDocumentCommand\cp{}{\crossproduct} % Shorthand for \crossproduct
+
+\DeclareDocumentCommand\vectorarrow{ s m }{\IfBooleanTF{#1}{\vec{\boldsymbol{#2}}}{\vec{\mathbf{#2}}}} % Vector arrow + bold [star for Greek and italic Roman]
+\DeclareDocumentCommand\va{}{\vectorarrow} % Shorthand for \vectorarrow
+
+\DeclareDocumentCommand\vectorunit{ s m }{\IfBooleanTF{#1}{\boldsymbol{\hat{#2}}}{\mathbf{\hat{#2}}}} % Unit vector [star for Greek and italic Roman]
+\DeclareDocumentCommand\vu{}{\vectorunit} % Shorthand for \vectorunit
+
+\DeclareDocumentCommand\dotproduct{}{\boldsymbol\cdot} % Vector dot product symbol
+\DeclareDocumentCommand\vdot{}{\dotproduct} % Shorthand for \dotproduct [note that the command sequence \dp is protected]
+
+\DeclareDocumentCommand\crossproduct{}{\boldsymbol\times} % Vector cross product symbol
+\DeclareDocumentCommand\cross{}{\crossproduct} % Shorthand for \crossproduct
+\DeclareDocumentCommand\cp{}{\crossproduct} % Shorthand for \crossproduct
+
+\DeclareDocumentCommand \div{m}{
+	\vnabla \vdot \vb{#1}
+	}
+
+\DeclareDocumentCommand \curl{m}{
+	\vnabla \times \vb{#1}
+}
+
+\DeclareDocumentCommand \grad{m}{
+	\vnabla #1
+}
+
+% Derivatives
+\DeclareDocumentCommand\differential{ o g d() }{ % Differential 'd'
+	% o: optional n for nth differential
+	% g: optional argument for readability and to control spacing
+	% d: long-form as in d(cos x)
+	\IfNoValueTF{#2}{
+		\IfNoValueTF{#3}
+			{\diffd\IfNoValueTF{#1}{}{^{#1}}}
+			{\mathinner{\diffd\IfNoValueTF{#1}{}{^{#1}}\argopen(#3\argclose)}}
+		}
+		{\mathinner{\diffd\IfNoValueTF{#1}{}{^{#1}}#2} \IfNoValueTF{#3}{}{(#3)}}
+	}
+\DeclareDocumentCommand\dd{}{\differential} % Shorthand for \differential
+
+\DeclareDocumentCommand\derivative{ s o m g d() }
+{ % Total derivative
+	% s: star for \flatfrac flat derivative
+	% o: optional n for nth derivative
+	% m: mandatory (x in df/dx)
+	% g: optional (f in df/dx)
+	% d: long-form d/dx(...)
+	\IfBooleanTF{#1}
+	{\let\fractype\flatfrac}
+	{\let\fractype\frac}
+	\IfNoValueTF{#4}
+	{
+		\IfNoValueTF{#5}
+		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
+		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+	}
+	{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}}
+}
+\DeclareDocumentCommand\dv{}{\derivative} % Shorthand for \derivative
+
+\DeclareDocumentCommand\partialderivative{ s o m g g d() }
+{ % Partial derivative
+	% s: star for \flatfrac flat derivative
+	% o: optional n for nth derivative
+	% m: mandatory (x in df/dx)
+	% g: optional (f in df/dx)
+	% g: optional (y in d^2f/dxdy)
+	% d: long-form d/dx(...)
+	\IfBooleanTF{#1}
+	{\let\fractype\flatfrac}
+	{\let\fractype\frac}
+	\IfNoValueTF{#4}
+	{
+		\IfNoValueTF{#6}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#6\argclose)}
+	}
+	{
+		\IfNoValueTF{#5}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}} #3}{\partial #4\IfNoValueTF{#2}{}{^{#2}}}}
+		{\fractype{\partial^2 #3}{\partial #4 \partial #5}}
+	}
+}
+\DeclareDocumentCommand\pderivative{}{\partialderivative} % Shorthand for \partialderivative
+\DeclareDocumentCommand\pdv{}{\partialderivative} % Shorthand for \partialderivative
+
+\newcommand{\figg}[6]{
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.475\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{#1}
+		\caption{#2}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.475\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{#3}
+		\caption{#4}
+	\end{subfigure}
+	\caption{#5}
+	\label{#6}
+\end{figure}
+}
+
+\newcommand{\figgg}[8]{
+	\begin{figure}
+		\centering
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{#1}
+			\caption{#2}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{#3}
+			\caption{#4}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.3\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{#5}
+			\caption{#6}
+		\end{subfigure}
+		\caption{#7}
+		\label{#8}
+	\end{figure}
+}
