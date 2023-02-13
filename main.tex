@@ -1,8 +1,12 @@
 \documentclass{report}
 \usepackage{listings}
 \usepackage{mwe}
-
 \input{AP_macros.sty}
+% must be below input
+\sisetup{
+	round-mode = places,
+	round-precision = 2
+}
 
 \title{A few examples and convenience macros in LaTeX}
 \author{Arturo Popoli}
@@ -28,23 +32,32 @@
 	Vector unit $ \vu{j} $ \\
 	Dot product $ \vdot $ \\
 	Cross product $ \cp $ \\
- 	Divergence: $ \div{A} $ \\
- 	Curl: $ \curl{A} $ \\
- 	Gradient: $ \grad{A} $ \\
+    Divergence: $ \div{A} $ \\
+    Curl: $ \curl{A} $ \\
+    Gradient: $ \grad{A} $ \\
  	
- 	\section{Derivatives}
- 	Differential: $ \dd{A} $ \\
- 	Derivative: $ \dv{f}{x} $ \\
- 	Partial derivative: $ \pdv{f}{x} $
+    \section{Derivatives}
+    Differential: $ \dd{A} $ \\
+    Derivative: $ \dv{f}{x} $ \\
+    Partial derivative: $ \pdv{f}{x} $
+
+    \section{Chemistry}
+    AP macros loads the \texttt{mhchem} package
+    \begin{equation}
+        \ce{Xe + e- -> Xe+ + 2e-}    
+    \end{equation}
+
+    \section{Numbers}
+    AP macros loads the \texttt{sinunitx} package, which allows to specify the desired precision. If \texttt{round-precision = 2}, \verb|\num{3,1415926535}| displays \num{3,1415926535}.
+    
+    \section{Options for AP macros}
+    As in Physics package, default options are:
+    \begin{lstlisting}[language=TeX]
+        \ExecuteOptions{trig,uprightdiff,bolddel}
+    \end{lstlisting} 
+    Just remove \texttt{bolddel} to get back to non-bold vector operators.
  	
- 	\section{Options for AP macros}
- 	As in Physics package, default options are:
- 	\begin{lstlisting}[language=TeX]
- 		\ExecuteOptions{trig,uprightdiff,bolddel}
- 	\end{lstlisting} 
- 	Just remove \texttt{bolddel} to get back to non-bold vector operators.
- 	
- 	\section{Plotting analytical functions}
+    \section{Plotting analytical functions}
  	
 	\begin{figure}[h!]
 		\centering
