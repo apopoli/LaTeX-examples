@@ -8,12 +8,17 @@
 	round-precision = 2
 }
 
+\usepackage{csvsimple-l3}
+
 \title{A few examples and convenience macros in LaTeX}
 \author{Arturo Popoli}
 
 \begin{document}
 	
 	\maketitle
+	
+	\csvautotabular{swarm_data.csv}
+
 	
 	\section{Two and three figures side by side}
 	\figg{example-image}{Description of (a)}{example-image}{Description of (b)}{Description of the two images}{fig:figg}
@@ -130,6 +135,31 @@
 			};
 		\end{semilogxaxis}		
 		\end{tikzpicture}
+	\end{figure}
+
+	\section{Plotting data in external .csv file}
+	
+	\begin{figure}
+		\centering
+		
+		\pgfplotstableread[col sep = comma]{swarm_data.csv} \SwarmData
+		\begin{tikzpicture}
+			% \pgfplotsset{scale only axis,width=0.7\columnwidth,height=0.35\columnwidth,}
+			\begin{semilogxaxis}[
+				width=0.5\textwidth,
+				xlabel=Reduced electric field $ \unit{\townsend} $,
+				ylabel=$ \mu_{\ce{N2+}} \unit{\per\meter\squared\per\volt\per\second}$,
+				grid = major,
+				% minor tick num = 4,
+				% legend style={at={(0.7,0.05)},anchor=south},
+				% legend style={font=\scriptsize},
+				]
+				\addplot[color=black,mark = none,thick] table[x=rfield,y=mobility] from \SwarmData;
+				\addlegendentry{Example of label $ \alpha $}
+			\end{semilogxaxis}
+		\end{tikzpicture}
+	
+		
 	\end{figure}
 
 
