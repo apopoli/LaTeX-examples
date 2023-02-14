@@ -26,6 +26,20 @@
 	\tcr{Text in Red} \\
 	\tcb{Text in Blue}
 	
+	\section{Parenthesis}
+	
+	\begin{equation}\label{key}
+		\pt{\sum_{a}^{b}}
+	\end{equation}
+
+	\begin{equation}\label{key}
+		\pq{\sum_{a}^{b}}
+	\end{equation}
+
+	\begin{equation}\label{key}
+		\pg{\sum_{a}^{b}}
+	\end{equation}
+	
 	\section{Vector quantities and operators}
 	Vector Bold $ \vb{A} $ \\
 	Bold arrow $ \va{A} $ \\
@@ -49,6 +63,12 @@
 
     \section{Numbers}
     AP macros loads the \texttt{sinunitx} package, which allows to specify the desired precision. If \texttt{round-precision = 2}, \verb|\num{3,1415926535}| displays \num{3,1415926535}.
+    
+    Only number: \num{3,1415926535} \\
+    
+    Number and units: \SI{6.022E-19}{\newton\per\meter\squared} \\
+    
+    Only units: \si{\coulomb}
     
     \section{Options for AP macros}
     As in Physics package, default options are:
